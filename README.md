@@ -10,7 +10,7 @@ or
 
 ```./project.sh FILE.svg```
 
-(you'll probably need to modify the .sh file to suit your setup)
+(you'll probably need to modify the .sh file to suit your setup - it enables/disables the projector display using xrandr)
 
 You can invert colours by pressing "i".
 
@@ -19,3 +19,8 @@ In calibration mode the cursor will turn into a cross and you'll need to click t
 If your cutting mat is a different size to mine, you'll need to specify its dimensions in the .config/ProjectPatterns.toml file.
 
 Press "q" to quit.
+
+
+## Actually using this as someone other than me
+
+If you're not running NixOS, replace the first 2 lines of project.py with ```#!/usr/bin/env python3``` and make sure you have the packages in line 2 installed
