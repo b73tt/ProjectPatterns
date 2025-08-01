@@ -54,9 +54,16 @@ pygame.display.set_caption("c=calibrate, i=invert, q=quit")
 
 # read SVG
 img = pygame.image.load(sys.argv[1])
-xml = ET.parse(sys.argv[1]).getroot()
-xpixpermm = img.get_size()[0] / float(xml.get("width").replace("mm",""))
-ypixpermm = img.get_size()[1] / float(xml.get("height").replace("mm",""))
+
+try:
+	xml = ET.parse(sys.argv[1]).getroot()
+	xpixpermm = img.get_size()[0] / float(xml.get("width").replace("mm",""))
+	ypixpermm = img.get_size()[1] / float(xml.get("height").replace("mm",""))
+except:
+	xpixpermm = 1 #not an SVG? default to 1 pixel per mm
+	ypixpermm = 1
+
+
 
 # Cutting mat sample points
 xsamples = (0, int(cw*xpixpermm))
@@ -117,6 +124,22 @@ while True:
 			displayImage(display, img, boardcoords, selectedcoords, inverted)
 		elif event.key == pygame.K_q:
 			break
+		elif event.key == pygame.K_RIGHT:
+			for corner in boardcoords:
+				boardcoords[corner] = (boardcoords[corner][0]-10*xpixpermm, boardcoords[corner][1])
+			displayImage(display, img, boardcoords, selectedcoords, inverted)
+		elif event.key == pygame.K_LEFT:
+			for corner in boardcoords:
+				boardcoords[corner] = (boardcoords[corner][0]+10*xpixpermm, boardcoords[corner][1])
+			displayImage(display, img, boardcoords, selectedcoords, inverted)
+		elif event.key == pygame.K_DOWN:
+			for corner in boardcoords:
+				boardcoords[corner] = (boardcoords[corner][0], boardcoords[corner][1]-10*ypixpermm)
+			displayImage(display, img, boardcoords, selectedcoords, inverted)
+		elif event.key == pygame.K_UP:
+			for corner in boardcoords:
+				boardcoords[corner] = (boardcoords[corner][0], boardcoords[corner][1]+10*ypixpermm)
+			displayImage(display, img, boardcoords, selectedcoords, inverted)
 
 
 settings["selectedcoords"] = selectedcoords
