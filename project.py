@@ -50,7 +50,7 @@ else:
 # start the display
 pygame.init()
 display = pygame.display.set_mode((w,h))
-pygame.display.set_caption("c=calibrate, i=invert, q=quit")
+pygame.display.set_caption("c=calibrate, i=invert, arrows=move, pgup/dn=zoom, r=reset position, q=quit")
 
 # read SVG
 img = pygame.image.load(sys.argv[1])
@@ -91,6 +91,8 @@ def displayImage(display, img, source, dest, inverted):
 	display.blit(pygame.image.frombuffer(cimg[:,:,:3].tobytes(), cimg.shape[1::-1], "RGB") , (0,0))
 	pygame.display.update()
 
+
+
 boardcoords = {"tl": (xsamples[0],ysamples[0]), "tr":(xsamples[1], ysamples[0]), "bl":(xsamples[0], ysamples[1]), "br":(xsamples[1], ysamples[1])}
 
 # initial display of the image
@@ -117,7 +119,7 @@ while True:
 				pygame.display.set_caption(coordorder[select])
 				pygame.mouse.set_cursor(pygame.cursors.broken_x)
 			else:
-				pygame.display.set_caption("c=calibrate, i=invert, q=quit")
+				pygame.display.set_caption("c=calibrate, i=invert, arrows=move, pgup/dn=zoom, r=reset position, q=quit")
 				pygame.mouse.set_cursor(pygame.cursors.arrow)
 		elif event.key == pygame.K_i:
 			inverted = not inverted
@@ -139,6 +141,19 @@ while True:
 		elif event.key == pygame.K_UP:
 			for corner in boardcoords:
 				boardcoords[corner] = (boardcoords[corner][0], boardcoords[corner][1]+10*ypixpermm)
+			displayImage(display, img, boardcoords, selectedcoords, inverted)
+		elif event.key == pygame.K_PAGEUP:
+			center = ((boardcoords["tl"][0]+boardcoords["br"][0])/2,(boardcoords["tl"][1]+boardcoords["br"][1])/2)  
+			for corner in boardcoords:
+				boardcoords[corner] = (boardcoords[corner][0]*0.9+center[0]*0.1, boardcoords[corner][1]*0.9+center[1]*0.1)
+			displayImage(display, img, boardcoords, selectedcoords, inverted)
+		elif event.key == pygame.K_PAGEDOWN:
+			center = ((boardcoords["tl"][0]+boardcoords["br"][0])/2,(boardcoords["tl"][1]+boardcoords["br"][1])/2)  
+			for corner in boardcoords:
+				boardcoords[corner] = ((boardcoords[corner][0]-center[0]*0.1)/0.9, (boardcoords[corner][1]-center[1]*0.1)/0.9)
+			displayImage(display, img, boardcoords, selectedcoords, inverted)
+		elif event.key == pygame.K_r:
+			boardcoords = {"tl": (xsamples[0],ysamples[0]), "tr":(xsamples[1], ysamples[0]), "bl":(xsamples[0], ysamples[1]), "br":(xsamples[1], ysamples[1])}
 			displayImage(display, img, boardcoords, selectedcoords, inverted)
 
 

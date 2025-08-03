@@ -18,6 +18,9 @@ To enter (and leave) calibration mode, press "c".
 In calibration mode the cursor will turn into a cross and you'll need to click the corners of your cutting mat anti-clockwise starting from top left.
 If your cutting mat is a different size to mine, you'll need to specify its dimensions in the .config/ProjectPatterns.toml file.
 
+You can move and zoom (+-10%) the image by pressing the arrow keys and page up/down.
+This can be reset by pressing "r".
+
 Press "q" to quit.
 
 
